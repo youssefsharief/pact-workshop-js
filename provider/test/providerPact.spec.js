@@ -1,50 +1,39 @@
-const verifier = require('pact').Verifier
-const path = require('path')
+const { Verifier } = require('@pact-foundation/pact')
 const chai = require('chai')
 const chaiAsPromised = require('chai-as-promised')
-const expect = chai.expect
+const path = require('path')
 chai.use(chaiAsPromised)
 
-const { server, dataStore } = require('../provider.js')
-
-// Set the current state
-server.post('/setup', (req, res) => {
-  switch (req.body.state) {
-    case 'date count == 0':
-      dataStore.count = 0
-      break
-    default:
-      dataStore.count = 1000
-  }
-
-  res.end()
-})
-
-server.listen(8081, () => {
-  console.log('Provider service listening on http://localhost:8081')
-})
 
 // Verify that the provider meets all consumer expectations
 describe('Pact Verification', () => {
-  it('should validate the expectations of Our Little Consumer', function () { // lexical binding required here for timeout
-    this.timeout(10000)
+  it('should validate the expectations of Our Little Consumer', function (done) { // lexical binding required here for timeout
 
-    let opts = {
-      provider: 'Our Provider',
-      providerBaseUrl: 'http://localhost:8081',
-      providerStatesSetupUrl: 'http://localhost:8081/setup',
-      pactBrokerUrl: 'https://test.pact.dius.com.au/',
-      tags: ['prod'],
-      pactBrokerUsername: 'dXfltyFMgNOFZAxr8io9wJ37iUpY42M',
-      pactBrokerPassword: 'O5AIZWxelWbLvqMd8PkAVycBJh2Psyg1',
-      publishVerificationResult: true,
-      providerVersion: '1.0.0'
-    }
+    const pactsDirectory = path.resolve(process.cwd(), 'pacts');
+    const opts = {
+        providerBaseUrl: 'http://localhost:3000',
+        provider: 'BackendService',
+        pactUrls: [`${pactsDirectory}/our_little_consumer-our_provider.json`],
+    };
 
-    return verifier.verifyProvider(opts)
-      .then(output => {
-        console.log('Pact Verification Complete!')
-        console.log(output)
-      })
+
+
+    // let opts = {
+    //   provider: 'Our Provider',
+    //   providerBaseUrl: 'http://localhost:3000',
+    //   pactUrls: [path.join(process.cwd(), 'pacts')],
+    //   // providerStatesSetupUrl: 'http://localhost:3000/setup',
+    //   pactBrokerUrl: 'https://test.pact.dius.com.au/pacts/provider/Our%20Provider/consumer/Our%20Little%20Consumer/latest',
+    //   tags: ['prod'],
+    //   pactBrokerUsername: 'dXfltyFMgNOFZAxr8io9wJ37iUpY42M',
+    //   pactBrokerPassword: 'O5AIZWxelWbLvqMd8PkAVycBJh2Psyg1',
+    //   publishVerificationResult: true,
+    //   providerVersion: '1.0.0'
+    // }
+
+    return new Verifier().verifyProvider(opts).then( (x) =>  {
+      console.log(x)
+      done()
+    }).catch(x => console.log(x));
   })
 })
