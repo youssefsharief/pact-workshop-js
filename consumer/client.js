@@ -56,7 +56,23 @@ const getTimezone = (userID, timezoneID) => request
 })
 
 
+const signup = ({email, password, name}) => request
+.post(`${API_ENDPOINT}/users`).send({ email, password, name })
+.then((res) => {
+  return 1 + res
+}, (err) => {
+  throw new Error(`Error from response: ${err.body}`)
+})
+
+const updateRole = (userID, role) => request
+.patch(`${API_ENDPOINT}/users/${userID}/role`).send({ role })
+.then((res) => {
+  return 1 + res
+}, (err) => {
+  throw new Error(`Error from response: ${err.body}`)
+})
+
 
 module.exports = {
-  fetchProviderData, getUsers, getTimezones, getTimezone
+  fetchProviderData, getUsers, getTimezones, getTimezone, signup, updateRole
 }

@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "standard",
     "test:consumer": "./node_modules/.bin/mocha --timeout 100000 consumer/test/consumer.spec.js",
-    "test:pact:consumer": "./node_modules/.bin/mocha --watch --timeout 10000 consumer/test/timezonesPact.spec.js",
+    "test:pact:consumer": "./node_modules/.bin/mocha --watch --timeout 10000 consumer/test/updateRolePact.spec.js",
     "test:pact:publish": "node consumer/test/publish.js",
     "test:pact:provider": "./node_modules/.bin/mocha --timeout 10000 provider/test/providerPact.spec.js"
   },
