@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "standard",
     "test:consumer": "./node_modules/.bin/mocha --timeout 100000 consumer/test/consumer.spec.js",
-    "test:pact:consumer": "./node_modules/.bin/mocha --watch --timeout 10000 consumer/test/updateRolePact.spec.js",
+    "test": "./node_modules/.bin/mocha --watch --timeout 10000 consumer/test/updateRolePact.spec.js",
     "test:pact:publish": "node consumer/test/publish.js",
     "test:pact:provider": "./node_modules/.bin/mocha --timeout 10000 provider/test/providerPact.spec.js"
   },
@@ -46,12 +46,13 @@
     "concurrently": "^3.1.0",
     "eslint": "^3.13.1",
     "eslint-config-google": "^0.7.1",
-    "mocha": "^3.2.0",
+    "mocha": "^3.5.3",
     "nock": "^9.0.13",
-    "pact": "^2.6.0",
     "standard": "^10.0.2"
   },
   "dependencies": {
+    "@pact-foundation/pact": "^5.9.0",
+    "@pact-foundation/pact-node": "^6.14.2",
     "body-parser": "^1.16.1",
     "cors": "^2.8.1",
     "express": "^4.14.0",

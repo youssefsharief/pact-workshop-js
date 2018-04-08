@@ -1,8 +1,7 @@
-const chai = require('chai')
 const path = require('path')
+const chai = require('chai')
+const { Pact } = require('@pact-foundation/pact')
 const chaiAsPromised = require('chai-as-promised')
-const pact = require('pact')
-const expect = chai.expect
 const API_PORT = process.env.API_PORT || 9123
 const {
   updateRole
@@ -13,7 +12,8 @@ chai.use(chaiAsPromised)
 // Note that we update the API endpoint to point at the Mock Service
 const LOG_LEVEL = process.env.LOG_LEVEL || 'WARN'
 
-const provider = pact({
+
+const provider = new Pact({
   consumer: 'Our Little Consumer',
   provider: 'Our Provider',
   port: API_PORT,
@@ -23,17 +23,11 @@ const provider = pact({
   spec: 2
 })
 
-
-// Alias flexible matchers for simplicity
-const { somethingLike: like, eachLike } = pact.Matchers
-
 describe('Pact with Our Provider', () => {
   before(() => {
     return provider.setup()
   })
-
   describe('updateRole', () => {
-
     describe('success as admin', () => {
         before(() => {
           return provider.addInteraction({

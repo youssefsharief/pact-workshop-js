@@ -1,11 +1,12 @@
-const chai = require('chai')
 const path = require('path')
+const chai = require('chai')
+const { Pact, Matchers } = require('@pact-foundation/pact')
+const { somethingLike: like } = Matchers
 const chaiAsPromised = require('chai-as-promised')
-const pact = require('pact')
 const expect = chai.expect
 const API_PORT = process.env.API_PORT || 9123
 const {
-  signup
+  getTimezone
 } = require('../client')
 chai.use(chaiAsPromised)
 
@@ -13,7 +14,8 @@ chai.use(chaiAsPromised)
 // Note that we update the API endpoint to point at the Mock Service
 const LOG_LEVEL = process.env.LOG_LEVEL || 'WARN'
 
-const provider = pact({
+
+const provider = new Pact({
   consumer: 'Our Little Consumer',
   provider: 'Our Provider',
   port: API_PORT,
@@ -23,9 +25,16 @@ const provider = pact({
   spec: 2
 })
 
+const provider = new Pact({
+  consumer: 'Our Little Consumer',
+  provider: 'Our Provider',
+  port: API_PORT,
+  log: path.resolve(process.cwd(), 'logs', 'pact.log'),
+  dir: path.resolve(process.cwd(), 'pacts'),
+  logLevel: LOG_LEVEL,
+  spec: 2
+})
 
-// Alias flexible matchers for simplicity
-const { somethingLike: like,  } = pact.Matchers
 
 describe('Pact with Our Provider', () => {
   before(() => {
