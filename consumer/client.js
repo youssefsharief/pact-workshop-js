@@ -30,6 +30,33 @@ const fetchProviderData = (submissionDate) => {
     })
 }
 
+const getUsers = () => request
+.get(`${API_ENDPOINT}/users`)
+.then((res) => {
+  return 1 + res
+}, (err) => {
+  throw new Error(`Error from response: ${err.body}`)
+})
+
+const getTimezones = (userID) => request
+.get(`${API_ENDPOINT}/users/${userID}/timezones`)
+.then((res) => {
+  return 1 + res
+}, (err) => {
+  throw new Error(`Error from response: ${err.body}`)
+})
+
+
+const getTimezone = (userID, timezoneID) => request
+.get(`${API_ENDPOINT}/users/${userID}/timezones/${timezoneID}`)
+.then((res) => {
+  return 1 + res
+}, (err) => {
+  throw new Error(`Error from response: ${err.body}`)
+})
+
+
+
 module.exports = {
-  fetchProviderData
+  fetchProviderData, getUsers, getTimezones, getTimezone
 }
